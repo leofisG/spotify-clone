@@ -39,7 +39,7 @@
           </div>
         </nav>
       </div>
-      <router-view></router-view>
+      <router-view class='router-view'></router-view>
     </div>
 
     <div class="play-bar">
@@ -70,6 +70,15 @@ export default {
 </script>
 
 <style>
+
+.router-view {
+  color: white;
+  z-index: 999;
+  padding-left: 220px;
+}
+.group {
+  color: #9f9f9e;
+}
 .play-bar svg {
   color: white;
 }
@@ -80,11 +89,16 @@ ul {
 
 li {
   list-style: none;
+  display: block;
+
 }
 
 li a {
   display: inline-block;
   text-decoration: none;
+  color: #9f9f9f;
+  padding: 10px;
+  font-weight: 700;
 }
 
 .play-button {
@@ -99,17 +113,18 @@ li a {
   left: 0;
   height: 100vh;
   z-index: 100;
-  background-color: rgba(0,0,0,.5);
+  background-color: #171a1e;
   overflow: auto;
 }
 
 .play-bar {
-    background-color: #181818;
+    background-color: #282828;
     position: fixed;
     width: 100%;
     bottom: 0;
     left: 0;
     z-index: 101;
+    height: 90px;
 }
 
 .play-control {
@@ -133,12 +148,20 @@ nav {
 
 .search-icon {
   display: inline-block;
+  vertical-align: top;
+  float: right;
 }
 
 .group {
   padding-bottom: 5px;
   padding-top: 10px;
   border-top: 1px solid hsla(0,0%,100%,.25);
+}
+
+.recently-played h2{
+  color: #9f9f9e;
+  font-weight: 300;
+  font-size: 10px;
 }
 
 </style>
