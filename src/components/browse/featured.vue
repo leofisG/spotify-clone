@@ -1,6 +1,25 @@
 <template>
   <div class="featured">
-    <p>123</p>
+  	<h1>{{mainTitle}}</h1>
+    <div class='container-fluid'>
+    	<div class='row'>
+    			<div v-for='playlist in playlists' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 wrapper'>
+<!--     	<img :src="playlist.images[0].url" alt="">
+
+ -->    	
+ 						<div class='playlist-container'>
+ 							<div class='playlist-hoverable'>
+ 								<div class='playlist-image' v-bind:style="{'background-image': 'url(' + playlist.images[0].url + ')'}" >
+									<!-- ADD PLAY BUTTON LATER -->
+ 									<a href="" class='playlist-detail-link'></a>
+ 								</div>
+    						<div class='more-info'><a href="">{{playlist.name}}</a></div>
+ 							</div>
+    				</div>
+
+ 					</div>
+    	</div>
+    </div>
   </div>
 </template>
 
@@ -9,8 +28,35 @@ export default {
   name: 'featured',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      mainTitle: '',
+      playlists: []
     }
+  },
+  methods: {
+  	getFeaturedAlbum() {
+  		this.$http.get('https://api.spotify.com/v1/browse/featured-playlists', {headers: {
+  			Authorization: 'Bearer ' + this.getLocalStorage('spotify-token')
+  		}})
+  		.then(function(res) {
+  			this.mainTitle = res.body.message;
+  			this.playlists = res.body.playlists.items;
+
+  			console.log(this.playlists);
+  			console.log(res.body);
+
+  		}, function(error) {
+  			// console.log(error.bodyText);
+  			var errorContent = JSON.parse(error.bodyText);
+  			if (errorContent.error.message === 'The access token expired') {
+  				var authUrl = 'https://accounts.spotify.com/authorize?client_id=fb0e57d017fe4c1b817fd5f624ebdf4d&redirect_uri=http:%2F%2Flocalhost:8080%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123';
+  				this.setLocalStorage('previous-url', location.href);
+  				window.location.href = authUrl;
+  			}
+  		})
+  	}
+  },
+  created: function() {
+  	this.getFeaturedAlbum();
   }
 }
 </script>
@@ -22,6 +68,58 @@ export default {
 }
 
 .featured {
-	height: 150vh;
+/*	height: 150vh;
+*/
+	padding: 0 0 90px 0;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+}
+img {
+	width: 200px;
+}
+
+.playlist-image {
+	background-repeat: no-repeat;
+	width: 100%;
+	background-size: contain;
+	padding-top: 100%;
+}
+.playlist-detail-link {
+	padding-top: 100%;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+.row {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+}
+
+.playlist-container {
+	padding-bottom: 2.5em;
+}
+
+.more-info {
+	margin: 12px 0 4px;
+}
+
+.playlist-image a {
+	width: 100%;
+	padding-top: 100%;
+}
+
+.playlist-hoverable {
+	cursor: pointer;
+}
+
+.playlist-hoverable:hover > .playlist-image {
+	filter: brightness(.3);
 }
 </style>

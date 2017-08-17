@@ -52,7 +52,6 @@
             <icon class="play-button" name="play-circle-o"></icon>
             <icon name="step-forward"></icon>
             <icon name="repeat"></icon>
-            <icon name="volume"></icon>
           </div>
           <div class="volume">
             
