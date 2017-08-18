@@ -6,7 +6,9 @@ import genres from '@/components/browse/genres'
 import newrelease from '@/components/browse/newRelease'
 import discover from '@/components/browse/discover'
 import callback from '@/components/callback'
-
+import searchInput   from '@/components/search/searchInput'
+import result from '@/components/search/results'
+import artists from '@/components/search/artists'
 
 Vue.use(Router)
 
@@ -45,6 +47,34 @@ export default new Router({
           path: 'discover',
           component: discover
         }
+      ]
+    },
+    {
+      path: '/search',
+      redirect: '/search/recent',
+      component: searchInput,
+      children: [
+        {
+          path: 'recent',
+        },
+        {
+          path: 'results/:keyword',
+          component: result
+        },
+        {
+          path: 'artists/:keyword',
+          component: artists
+        },
+        {
+          path: 'songs/:keyword'
+        },
+        {
+          path: 'albums/:keyword'
+        },
+        {
+          path: 'playlists'
+        }
+
       ]
     }
   ]

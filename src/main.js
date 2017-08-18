@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import Router from 'vue-router'
 import router from './router'
@@ -16,6 +17,7 @@ Vue.component('play-button', playButton)
 
 Vue.use(vueResource)
 Vue.use(Router)
+Vue.use(Vuex)
 Vue.config.productionTip = false
 
 // helper function to manipulate the cookie
@@ -31,11 +33,26 @@ Vue.prototype.stripAuthCode = function(url) {
 	return url.split('&')[0].split('=')[1];
 } 
 
+//not sure if I really need to use the Vuex, I just want to share the search result between difference components
+const store = new Vuex.Store({
+  state: {
+    artists: [],
+    tracks: [],
+    albums: [],
+    playlists: []
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
   watch: {
