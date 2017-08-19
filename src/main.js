@@ -10,10 +10,12 @@ import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import albumBlock from './components/album-block'
 import playButton from './components/play-button'
+import searchNav from './components/search/searchNav'
 
 Vue.component('icon', Icon)
 Vue.component('album-block', albumBlock)
 Vue.component('play-button', playButton)
+Vue.component('search-nav', searchNav)
 
 Vue.use(vueResource)
 Vue.use(Router)

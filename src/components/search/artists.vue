@@ -1,44 +1,30 @@
 <template>
-  <div>
-    <p>123</p>
+  <div class='wrapper'>
+    <search-nav></search-nav>
+    <div class='row'>
+      <album-block v-for="artist in artists" class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2' :album-title=artist.name :album-image=artist.images[0].url>
+      </album-block>
+    </div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: 'search-input',
+  name: 'artists',
   data () {
     return {
       keyword: '',
+      artists: []
     }
   },
-  watch: {
-    '$route': 'search'
-  },
   methods: {
-    search() {
-      console.log('artists' + this.$store.state.count);
-      var keyword = this.$route.path.split('/')[3];
-      console.log('keyword ' + keyword);
-      this.$http.get('https://api.spotify.com/v1/search?type=album,track,playlist,artist&q=' + keyword, {headers: {
-        Authorization: 'Bearer ' + this.getLocalStorage('spotify-token')
-      }})
-      .then(function(res) {
-        console.log(res.body);
-      }, function(error) {
-        // console.log(error.bodyText);
-        var errorContent = JSON.parse(error.bodyText);
-        if (errorContent.error.message === 'The access token expired') {
-          var authUrl = 'https://accounts.spotify.com/authorize?client_id=fb0e57d017fe4c1b817fd5f624ebdf4d&redirect_uri=http:%2F%2Flocalhost:8080%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123';
-          this.setLocalStorage('previous-url', location.href);
-          window.location.href = authUrl;
-        }
-      })
+    showArtists: function() {
+      this.artists = JSON.parse(localStorage.artists);
+      console.log( this.artists);
     }
   },
   created: function() {
-      this.search();
+      this.showArtists();
   }
 }
 </script>
@@ -47,5 +33,8 @@ export default {
 <style scoped>
 * {
   color: white;
+}
+.row {
+  width: 100%;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>123</p>
+    <search-nav></search-nav>
   </div>
 
 </template>
@@ -10,7 +10,7 @@ export default {
   name: 'search-input',
   data () {
     return {
-      keyword: '',
+      keyword: 'ed',
       artists: [1,2,2]
     }
   },
@@ -19,9 +19,9 @@ export default {
   },
   methods: {
     search() {
-      var keyword = this.$route.path.split('/')[3];
-      console.log('keyword ' + keyword);
-      this.$http.get('https://api.spotify.com/v1/search?type=album,track,playlist,artist&q=' + keyword, {headers: {
+      this.keyword = this.$route.path.split('/')[3];
+      console.log('keyword ' + this.keyword);
+      this.$http.get('https://api.spotify.com/v1/search?type=album,track,playlist,artist&q=' + this.keyword, {headers: {
         Authorization: 'Bearer ' + this.getLocalStorage('spotify-token')
       }})
       .then(function(res) {
@@ -50,6 +50,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 * {
+  color: white;
+}
+
+.search-options {
+  text-transform: uppercase;
+  color: #a0a0a0;
+  transion: all .3s;
+}
+
+.search-options:hover {
   color: white;
 }
 </style>
