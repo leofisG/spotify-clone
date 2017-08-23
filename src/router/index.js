@@ -9,6 +9,7 @@ import callback from '@/components/callback'
 import searchInput   from '@/components/search/searchInput'
 import result from '@/components/search/results'
 import artists from '@/components/search/artists'
+import playlist from '@/components/playlist'
 
 Vue.use(Router)
 
@@ -72,10 +73,14 @@ export default new Router({
           path: 'albums/:keyword'
         },
         {
-          path: 'playlists'
+          path: 'playlists/:keyword'
         }
 
       ]
+    },
+    {
+      path: '/playlist/:playlistId',
+      component: playlist
     }
   ]
 })
