@@ -44,12 +44,12 @@
 
     <div class="play-bar">
       <footer>
-        <div class="playing-bar">
+        <div class="playing-bar" v-on:click="togglePlay">
           <div class="now-playing"></div>
           <div class="play-control">
             <icon name="random"></icon>
             <icon name="step-backward"></icon>
-            <icon class="play-button" name="play-circle-o"></icon>
+            <play-button class="play-button"></play-button>
             <icon name="step-forward"></icon>
             <icon name="repeat"></icon>
           </div>
@@ -57,14 +57,49 @@
             
           </div>
         </div>
+        <div class="playback-bar">
+          <div class="progress-bar">
+            <div class="inner-progress" v-bind:style="{ width: progressWid + '%'}"></div>
+          </div>
+        </div>
       </footer>
     </div>
+    <audio v-on:timeupdate="updateProgress" src="https://p.scdn.co/mp3-preview/4839b070015ab7d6de9fec1756e1f3096d908fba" ref="track"></audio>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      isPlayed: false,
+      progressWid: 0
+    }
+  },
+  methods: {
+    togglePlay: function() {
+      var player = this.$refs.track;
+      if(!this.isPlayed) {
+        player.play();
+        this.isPlayed = true;
+        console.log('It should start playing!');
+        console.log(this.$refs.track.currentTime);
+      }else{
+        player.pause();
+        this.isPlayed = false;
+        console.log('It should now stop playing.')
+      }
+    },
+    updateProgress: function() {
+      var player = this.$refs.track;
+      var currentTime = player.currentTime;
+      var duration = player.duration;
+      this.progressWid = currentTime/duration * 100;
+    }
+  },
+  created: function(){
+  }
 }
 </script>
 
@@ -101,6 +136,7 @@ li a {
 }
 
 .play-button {
+  display: inline-block !important;
   height: 32px;
   width: 32px;
 }
@@ -171,6 +207,17 @@ a:focus, a:hover {
 
 .router-link-active, .router-link-active:hover, router-link-active:active {
   color: #1db954;
+}
+
+.progress-bar {
+  background-color: #404040;
+  width: 100%;
+  height: 4px;
+}
+
+.inner-progress {
+  background-color: green;
+  height: 100%;
 }
 
 
