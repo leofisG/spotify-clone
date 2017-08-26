@@ -39,12 +39,12 @@
           </div>
         </nav>
       </div>
-      <router-view class='router-view'></router-view>
+      <router-view class='router-view' v-on:togglePlay="togglePlay"></router-view>
     </div>
 
     <div class="play-bar">
       <footer>
-        <div class="playing-bar" v-on:click="togglePlay">
+        <div class="playing-bar" v-on:click="playbuttonToggle">
           <div class="now-playing"></div>
           <div class="play-control">
             <icon name="random"></icon>
@@ -64,7 +64,7 @@
         </div>
       </footer>
     </div>
-    <audio v-on:timeupdate="updateProgress" src="https://p.scdn.co/mp3-preview/4839b070015ab7d6de9fec1756e1f3096d908fba" ref="track"></audio>
+    <audio v-on:timeupdate="updateProgress" v-on:ended="playNext" src="https://p.scdn.co/mp3-preview/4839b070015ab7d6de9fec1756e1f3096d908fba" ref="track"></audio>
   </div>
 </template>
 
@@ -74,13 +74,39 @@ export default {
   data () {
     return {
       isPlayed: false,
-      progressWid: 0
+      randomMode: false,
+      progressWid: 0,
+      currentTrack: '',
+      tracks: '',
+      trackNum: ''
     }
   },
   methods: {
-    togglePlay: function() {
+    /*
+     * @param tracks[object]: the tracks object that contain all the information about the tracks
+     * @param trackNum[number]: index of the track that is to be played, it starts from 0 which means it is the same as the array index.
+     */
+    togglePlay: function(tracks, trackNum) {
       var player = this.$refs.track;
       if(!this.isPlayed) {
+        console.log('tracks ',tracks[trackNum].track);
+        console.log('trackNum', trackNum);
+        var trackId = tracks[trackNum].track.uri.split(':')[2];
+        console.log('trackId', trackId);
+        console.log('current', this.currentTrack);
+        if(trackId !== this.currentTrack) {
+          this.currentTrack = trackId;
+          player.src = tracks[trackNum].track.preview_url;
+        }
+
+        if (this.tracks !== tracks) {
+          this.tracks = tracks;
+        }
+
+        if (this.trackNum !== trackNum) {
+          this.trackNum = trackNum;
+        }
+        console.log(this.currentTrack);
         player.play();
         this.isPlayed = true;
         console.log('It should start playing!');
@@ -91,11 +117,36 @@ export default {
         console.log('It should now stop playing.')
       }
     },
+    playbuttonToggle: function() {
+      var player = this.$refs.track;
+      if(!this.isPlayed) {
+        player.play();
+        this.isPlayed = true;
+      }else{
+        player.pause();
+        this.isPlayed = false;
+      }
+
+    },
     updateProgress: function() {
       var player = this.$refs.track;
       var currentTime = player.currentTime;
       var duration = player.duration;
       this.progressWid = currentTime/duration * 100;
+    },
+    playNext: function() {
+      var player = this.$refs.track;
+      for (var i = this.trackNum + 1; i < this.tracks.length; i++) {
+          if (this.tracks[i].track.preview_url !== null) {
+            this.trackNum = i;
+            player.src = this.tracks[this.trackNum].track.preview_url;
+            break;
+          }
+      }
+      var trackId = this.tracks[this.trackNum].track.uri.split(':')[2];
+      this.currentTrack = trackId;
+      player.play();
+      console.log('playNext!!!');
     }
   },
   created: function(){

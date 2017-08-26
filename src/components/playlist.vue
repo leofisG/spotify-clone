@@ -12,7 +12,7 @@
       <button class="btn btn-green">play</button>
     </div>
     <div right="right" >
-      <track-display v-for="(track,index) in tracks" :track-title="track.track.name" :artist="track.track.artists" :album="track.track.album.name" :trackNum="index"></track-display>
+      <track-display v-for="(track,index) in tracks" :track-title="track.track.name" :artist="track.track.artists" :album="track.track.album.name" :trackNum="index" v-on:togglePlay="togglePlayState"></track-display>
     </div>
   </div>
 </template>
@@ -25,7 +25,8 @@ export default {
       playListName: '',
       owner: '',
       tracks: [],
-      images: ''
+      images: '',
+      isPlaying: false
     }
   },
   methods: {
@@ -40,7 +41,7 @@ export default {
         this.tracks = res.body.tracks.items;
         this.owner = res.body.owner;
         this.images = res.body.images;
-        console.log(this.images[0].url);
+        // console.log(this.images[0].url);
         console.log(this.tracks);
         console.log('res', res.body);
 
@@ -53,6 +54,11 @@ export default {
           window.location.href = authUrl;
         }
       })
+    },
+    togglePlayState(trackNum) {
+      console.log('state toggled!', trackNum);
+      this.$emit('togglePlay', this.tracks, trackNum);
+      console.log(this.tracks);
     }
   },
   created: function() {
