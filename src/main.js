@@ -12,12 +12,15 @@ import albumBlock from './components/album-block'
 import playButton from './components/play-button'
 import searchNav from './components/search/searchNav'
 import trackDisplay from './components/track-display'
+import category from './components/category'
 
+//maybe I don't need to register them all globally
 Vue.component('icon', Icon)
 Vue.component('album-block', albumBlock)
 Vue.component('play-button', playButton)
 Vue.component('search-nav', searchNav)
 Vue.component('track-display', trackDisplay)
+Vue.component('category', category)
 
 Vue.use(vueResource)
 Vue.use(Router)

@@ -7,7 +7,6 @@
           <router-link :to="url" class='playlist-detail-link'>
             <div class='playlist-image' v-bind:style="{'background-image': 'url(' + albumImage + ')'}" >
             </div>
-            <play-button class='album-play'></play-button>
           </router-link>
         </div>
 
@@ -27,7 +26,7 @@ export default {
   computed: {
     url: function() {
       if(this.albumUrl) {
-        var uriArr = this.albumUrl.split(':');
+        var uriArr = this.albumUrl.split('/');
         var type = uriArr.slice(-2, -1);
         var id = uriArr.slice(-1);
         return '/' + type + '/' + id;

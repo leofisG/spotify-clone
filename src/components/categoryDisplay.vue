@@ -1,6 +1,6 @@
 <template>
   <div class="featured">
-  	<h1>{{mainTitle}}</h1>
+  	<h1>Popular playlists</h1>
     <div class='container-fluid'>
       <div class='row'>
         <album-block v-for='playlist in playlists' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2' :album-title="playlist.name" :album-image="playlist.images[0].url" :album-url="playlist.uri">
@@ -21,15 +21,15 @@ export default {
   },
   methods: {
   	getFeaturedAlbum() {
-  		this.$http.get('https://api.spotify.com/v1/browse/featured-playlists', {headers: {
+      var categoryName = location.href.split('/').slice(-1)[0];
+  		this.$http.get('https://api.spotify.com/v1/browse/categories/' + categoryName + '/playlists', {headers: {
   			Authorization: 'Bearer ' + this.getLocalStorage('spotify-token')
   		}})
   		.then(function(res) {
-  			this.mainTitle = res.body.message;
   			this.playlists = res.body.playlists.items;
 
   			console.log(this.playlists);
-  			console.log(res.body);
+  			console.log('body',res.body.playlists);
 
   		}, function(error) {
   			// console.log(error.bodyText);
@@ -57,7 +57,9 @@ export default {
 .featured {
 /*	height: 150vh;
 */
-	padding: 0 0 90px 0;
+/*	padding: 0 0 90px 0;
+*/
+  padding-bottom: 90px;
 }
 
 a {

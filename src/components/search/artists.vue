@@ -2,7 +2,7 @@
   <div class='wrapper'>
     <search-nav></search-nav>
     <div class='row'>
-      <album-block v-for="artist in artists" class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2' :album-title=artist.name :album-image=artist.images[0].url>
+      <album-block v-for="artist in artists" class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2' :album-title=artist.name :album-image=artist.images[0] :album-url=artist.uri>
       </album-block>
     </div>
   </div>
@@ -20,7 +20,7 @@ export default {
   methods: {
     showArtists: function() {
       this.artists = JSON.parse(localStorage.artists);
-      console.log( this.artists);
+      console.log('artists',this.artists);
     }
   },
   created: function() {

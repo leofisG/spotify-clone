@@ -10,6 +10,8 @@ import searchInput   from '@/components/search/searchInput'
 import result from '@/components/search/results'
 import artists from '@/components/search/artists'
 import playlist from '@/components/playlist'
+import album from '@/components/album'
+import categoryDisplay from '@/components/categoryDisplay'
 
 Vue.use(Router)
 
@@ -81,6 +83,14 @@ export default new Router({
     {
       path: '/playlist/:playlistId',
       component: playlist
+    },
+    {
+      path: '/album/:albumId',
+      component: album
+    }, 
+    {
+      path: '/categories/:categoryName',
+      component: categoryDisplay
     }
   ]
 })
