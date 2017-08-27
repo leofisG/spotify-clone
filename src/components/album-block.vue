@@ -32,6 +32,7 @@ export default {
         var id = uriArr.slice(-1);
         return '/' + type + '/' + id;
       }
+      return ''
     }
   },
   created: function(){

@@ -1,18 +1,19 @@
 <template>
   <div class="playlist">
-    <div class="left">
-      <img :src="images[0].url" alt="">
-      // change it to the component later
-      <h2>{{playListName}}</h2>
-      <div class="owner">
-        <span>By</span>
-        <a href="">{{owner.display_name}}</a>
+    <div class="row">
+      <div class="left col-xs-12 col-lg-3 col-xl-4 col-sticky">
+      <album-block :album-image="images[0].url"></album-block>
+        <h2>{{playListName}}</h2>
+        <div class="owner">
+          <span>By</span>
+          <a href="">{{owner.display_name}}</a>
+        </div>
+        <p class="song-count">{{tracks.length}} songs</p>
+        <button class="btn btn-green">play</button>
       </div>
-      <p class="song-count">{{tracks.length}} songs</p>
-      <button class="btn btn-green">play</button>
-    </div>
-    <div right="right" >
-      <track-display v-for="(track,index) in tracks" :track-title="track.track.name" :artist="track.track.artists" :album="track.track.album.name" :trackNum="index" v-on:togglePlay="togglePlayState"></track-display>
+      <div class="right col-xs-12 col-lg-9 col-xl-8" >
+        <track-display v-for="(track,index) in tracks" :track-title="track.track.name" :artist="track.track.artists" :album="track.track.album.name" :trackNum="index" :duration="track.track.duration_ms" v-on:togglePlay="togglePlayState"></track-display>
+      </div>
     </div>
   </div>
 </template>
@@ -71,5 +72,10 @@ export default {
 <style scoped>
 .song-count {
   text-transform: uppercase;
+}
+
+.row {
+  margin: 0;
+  padding: 2em;
 }
 </style>
