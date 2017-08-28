@@ -27,6 +27,7 @@ export default {
 	text-transform: uppercase;
   text-decoration: none;
   color: hsla(0,0%,100%,.5);
+  font-size: .8rem;
 }
 
 .link:hover {

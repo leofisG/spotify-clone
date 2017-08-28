@@ -7,7 +7,7 @@
           <router-link :to="url" class='playlist-detail-link'>
             <div class='playlist-image' v-bind:style="{'background-image': 'url(' + albumImage + ')'}" >
             </div>
-            <play-button class='album-play'></play-button>
+            <play-button class='album-play' v-on:albumPlayClicked="emitAlbum"></play-button>
           </router-link>
         </div>
 
@@ -24,6 +24,12 @@
 export default {
   name: 'album-block',
   props: ['album-title', 'album-image', 'album-url'],
+  methods: {
+    emitAlbum: function() {
+      console.log('emitalbum');
+      this.$emit('playAlbum', this.albumUrl);
+    }
+  },
   computed: {
     url: function() {
       if(this.albumUrl) {

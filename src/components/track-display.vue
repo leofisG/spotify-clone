@@ -2,6 +2,9 @@
   <div>
     <li class="tracks">
       <div class="index">
+          <div class="play-button" v-on:click="togglePlay">
+            <svg height="12" width="12" xmlns="http://www.w3.org/2000/svg" class="icon-play" viewBox="0 0 85 100"><path fill="currentColor" d="M81 44.6c5 3 5 7.8 0 10.8L9 98.7c-5 3-9 .7-9-5V6.3c0-5.7 4-8 9-5l72 43.3z" class=""><title>PLAY</title></path></svg>
+          </div>
           <p class="track-num" v-on:click="togglePlay">{{trackNum+1}}. </p> 
       </div>
       <div class="track-name">
@@ -33,6 +36,7 @@ export default {
     togglePlay() {
         console.log('been clicked!');
         this.$emit('togglePlay', this.trackNum);
+        console.log('been clicked 2!')
     }
   },
   computed: {
@@ -53,7 +57,7 @@ export default {
   text-transform: uppercase;
 }
 
-.track-num {
+.track-num, .play-button {
   cursor: pointer;
 }
 
@@ -65,8 +69,12 @@ export default {
   background-color: rgba(112, 109, 109, 0.87);
 }
 
-.track-num {
-  margin: 8px 0 0 0;
+.tracks:hover .play-button {
+  display: inline-block;
+}
+
+.tracks:hover .track-num {
+  display: none;
 }
 
 .index {
@@ -84,8 +92,13 @@ export default {
   flex: 1;
 }
 
-.duration-container {
+
+.track-num, .duration-container, .play-button {
   margin: 8px 0 0 0;
+}
+
+.play-button {
+  display: none;
 }
 
 </style>

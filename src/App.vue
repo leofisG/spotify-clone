@@ -39,17 +39,17 @@
           </div>
         </nav>
       </div>
-      <router-view class='router-view' v-on:togglePlay="togglePlay"></router-view>
+      <router-view class='router-view' v-on:playTrack="playSelectedTrack" v-on:greenBtnClicked="greenBtnToggle"></router-view>
     </div>
 
     <div class="play-bar">
       <footer>
-        <div class="playing-bar" v-on:click="playbuttonToggle">
+        <div class="playing-bar">
           <div class="now-playing"></div>
           <div class="play-control">
             <icon name="random"></icon>
             <icon name="step-backward"></icon>
-            <play-button class="play-button"></play-button>
+            <play-button class="play-button" v-on:playedClicked="playbuttonToggle"></play-button>
             <icon name="step-forward"></icon>
             <icon name="repeat"></icon>
           </div>
@@ -86,47 +86,83 @@ export default {
      * @param tracks[object]: the tracks object that contain all the information about the tracks
      * @param trackNum[number]: index of the track that is to be played, it starts from 0 which means it is the same as the array index.
      */
-    togglePlay: function(tracks, trackNum) {
+    playSelectedTrack: function(tracks, trackNum) {
+      console.log('play selected track')
       var player = this.$refs.track;
-      if(!this.isPlayed) {
-        console.log('tracks ',tracks[trackNum].track);
-        console.log('trackNum', trackNum);
-        var trackId = tracks[trackNum].track.uri.split(':')[2];
-        console.log('trackId', trackId);
-        console.log('current', this.currentTrack);
-        if(trackId !== this.currentTrack) {
-          this.currentTrack = trackId;
-          player.src = tracks[trackNum].track.preview_url;
-        }
+      var trackId = tracks[trackNum].track.uri.split(':')[2];
 
-        if (this.tracks !== tracks) {
-          this.tracks = tracks;
-        }
-
-        if (this.trackNum !== trackNum) {
-          this.trackNum = trackNum;
-        }
-        console.log(this.currentTrack);
-        player.play();
-        this.isPlayed = true;
-        console.log('It should start playing!');
-        console.log(this.$refs.track.currentTime);
-      }else{
-        player.pause();
-        this.isPlayed = false;
-        console.log('It should now stop playing.')
+      if(trackId !== this.currentTrack) {
+        this.currentTrack = trackId;
+        player.src = tracks[trackNum].track.preview_url;
       }
+
+      if (this.tracks !== tracks) {
+        this.tracks = tracks;
+      }
+
+      if (this.trackNum !== trackNum) {
+        this.trackNum = trackNum;
+      }
+
+      console.log(this.currentTrack);
+      if (!this.$store.state.isPlaying) {
+          this.$store.commit('togglePlayState');
+      }
+      player.play();      
+
+
+
+
+
+
+      // //might be of future use keep the codes here for the time being
+      // if(!this.$store.state.isPlaying) {
+      //   console.log('tracks ',tracks[trackNum].track);
+      //   console.log('trackNum', trackNum);
+      //   var trackId = tracks[trackNum].track.uri.split(':')[2];
+      //   console.log('trackId', trackId);
+      //   console.log('current', this.currentTrack);
+      //   if(trackId !== this.currentTrack) {
+      //     this.currentTrack = trackId;
+      //     player.src = tracks[trackNum].track.preview_url;
+      //   }
+
+      //   if (this.tracks !== tracks) {
+      //     this.tracks = tracks;
+      //   }
+
+      //   if (this.trackNum !== trackNum) {
+      //     this.trackNum = trackNum;
+      //   }
+
+      //   console.log(this.currentTrack);
+      //   player.play();
+      //   this.$store.state.isPlaying = true;
+      //   console.log('It should start playing!');
+      //   console.log(this.$refs.track.currentTime);
+      // }else{
+      //   if (trackId !== this.currentTrack || this.tracks !== tracks || this.trackNum !== trackNum)
+      //   player.pause();
+      //   this.isPlayed = false;
+      //   console.log('It should now stop playing.')
+      // }
     },
     playbuttonToggle: function() {
       var player = this.$refs.track;
-      if(!this.isPlayed) {
+      console.log('play button is been clicked')
+      console.log(this.$store.state.isPlaying);
+      if(!this.$store.state.isPlaying) {
         player.play();
-        this.isPlayed = true;
       }else{
         player.pause();
-        this.isPlayed = false;
       }
-
+      this.$store.commit('togglePlayState')
+    },
+    greenBtnToggle: function(tracks) {
+      if(tracks !== this.tracks) {
+        this.tracks = tracks;
+      }
+      // under construction
     },
     updateProgress: function() {
       var player = this.$refs.track;
@@ -155,6 +191,9 @@ export default {
 </script>
 
 <style>
+a, a:active, a:visited, a:hover, a:focus {
+  text-decoration: none;
+}
 
 .router-view {
   color: white;
@@ -187,7 +226,7 @@ li a {
 }
 
 .play-button {
-  display: inline-block !important;
+  display: inline-block;
   height: 32px;
   width: 32px;
 }
@@ -251,13 +290,14 @@ nav {
 }
 
 
-a:focus, a:hover {
+a:hover {
   text-decoration: none;
   color: white;
 }
 
-.router-link-active, .router-link-active:hover, router-link-active:active {
+.router-link-active, .router-link-active:hover, .router-link-active:active, .router-link-active:visited {
   color: #1db954;
+  text-decoration: none;
 }
 
 .progress-bar {

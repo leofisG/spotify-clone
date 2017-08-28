@@ -9,10 +9,10 @@
           <a href="">{{owner.display_name}}</a>
         </div>
         <p class="song-count">{{tracks.length}} songs</p>
-        <button class="btn btn-green">play</button>
+        <button class="btn btn-green" v-on:click="greenButtonClicked">{{playState}}</button>
       </div>
       <div class="right col-xs-12 col-lg-9 col-xl-8" >
-        <track-display v-for="(track,index) in tracks" :track-title="track.track.name" :artist="track.track.artists" :album="track.track.album.name" :trackNum="index" :duration="track.track.duration_ms" v-on:togglePlay="togglePlayState"></track-display>
+        <track-display v-for="(track,index) in tracks" :track-title="track.track.name" :artist="track.track.artists" :album="track.track.album.name" :trackNum="index" :duration="track.track.duration_ms" v-on:togglePlay="trackButtonClicked"></track-display>
       </div>
     </div>
   </div>
@@ -27,7 +27,6 @@ export default {
       owner: '',
       tracks: [],
       images: '',
-      isPlaying: false
     }
   },
   methods: {
@@ -56,10 +55,21 @@ export default {
         }
       })
     },
-    togglePlayState(trackNum) {
-      console.log('state toggled!', trackNum);
-      this.$emit('togglePlay', this.tracks, trackNum);
-      console.log(this.tracks);
+    trackButtonClicked(trackNum) {
+      console.log('state toggled!', this.tracks, trackNum);
+      // this.isPlaying = this.isPlaying ? false : true;// don't change play state here, change it at the parent
+      this.$emit('playTrack', this.tracks, trackNum);
+      console.log('play!')
+    },
+    greenButtonClicked() {
+      console.log('green button is clicked!');
+      this.$emit('greenBtnClicked', this.tracks);
+      console.log('green!')
+    }
+  },
+  computed: {
+    playState: function() {
+      return this.$store.state.isPlaying ? "PAUSE" : "PLAY";
     }
   },
   created: function() {
@@ -70,6 +80,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.btn-green {
+  background-color: #1db954;
+  padding: 11px 44px 12px;
+  transition: all .2s;
+}
+
+.btn-green:hover {
+  background-color: #1df269;
+}
+
 .song-count {
   text-transform: uppercase;
 }
@@ -77,5 +97,17 @@ export default {
 .row {
   margin: 0;
   padding: 2em;
+}
+
+.owner, .song-count {
+  color: hsla(0,0%,100%,.6);
+}
+
+.owner a {
+  color: white;
+}
+
+.left {
+  text-align: center;
 }
 </style>

@@ -3,7 +3,7 @@
   	<h1>{{mainTitle}}</h1>
     <div class='container-fluid'>
       <div class='row'>
-        <album-block v-for='playlist in playlists' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2' :album-title="playlist.name" :album-image="playlist.images[0].url" :album-url="playlist.uri">
+        <album-block v-for='playlist in playlists' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2' :album-title="playlist.name" :album-image="playlist.images[0].url" :album-url="playlist.uri" v-on:playAlbum="playThisAlbum">
         </album-block>
       </div>
     </div>

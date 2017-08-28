@@ -35,3 +35,7 @@ npm test
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 And I'd better pass an id to the component, so that when the the component emit the event with id, the parent can catch the child's id and play the curresponding music.
+
+
+2017/8/28
+Introduce the Vuex to manage the player's `isPlaying` state. This is necessary because it easier than passing the `prop` from parent to child or emit the event from child to parent. I will have three component under the `playlist/:playlistId` route that will need to be changed when the `isPlaying` state is change. There are the player control play button, the green button, the track that are currently being played.

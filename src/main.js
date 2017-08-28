@@ -43,14 +43,11 @@ Vue.prototype.stripAuthCode = function(url) {
 //not sure if I really need to use the Vuex, I just want to share the search result between difference components
 const store = new Vuex.Store({
   state: {
-    artists: [],
-    tracks: [],
-    albums: [],
-    playlists: []
+    isPlaying: false
   },
   mutations: {
-    increment (state) {
-      state.count++
+    togglePlayState (state) {
+      state.isPlaying = state.isPlaying ? false : true;
     }
   }
 })
