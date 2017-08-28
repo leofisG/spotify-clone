@@ -28,7 +28,7 @@
 
           <div class="group recently-played">
             <h2>RECENTLY PLAYED</h2>
-            web spotify simply store the recently played data all in local storage
+            web spotify simply store the recently played data all in local storage{{isPlaying}}
           </div>
 
           <ul class="nav-list">
@@ -64,11 +64,13 @@
         </div>
       </footer>
     </div>
-    <audio v-on:timeupdate="updateProgress" v-on:ended="playNext" src="https://p.scdn.co/mp3-preview/4839b070015ab7d6de9fec1756e1f3096d908fba" ref="track"></audio>
+    <audio v-on:timeupdate="updateProgress" v-on:ended="playNext" ref="track"></audio>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'app',
   data () {
@@ -77,7 +79,6 @@ export default {
       randomMode: false,
       progressWid: 0,
       currentTrack: '',
-      tracks: '',
       trackNum: ''
     }
   },
@@ -159,9 +160,10 @@ export default {
       this.$store.commit('togglePlayState')
     },
     greenBtnToggle: function(tracks) {
-      if(tracks !== this.tracks) {
-        this.tracks = tracks;
+      if(tracks !== this.$store.state.tracks) {
+        this.$store.commit('updateTracks', tracks);
       }
+      this.$store.commit('togglePlayState')
       // under construction
     },
     updateProgress: function() {
@@ -172,20 +174,82 @@ export default {
     },
     playNext: function() {
       var player = this.$refs.track;
-      for (var i = this.trackNum + 1; i < this.tracks.length; i++) {
-          if (this.tracks[i].track.preview_url !== null) {
-            this.trackNum = i;
-            player.src = this.tracks[this.trackNum].track.preview_url;
+      var track = this.$store.state.track;
+      var tracks = this.$store.state.tracks;
+      var trackId = this.$store.state.trackId;
+
+      for (var i = trackId + 1; i < tracks.length; i++) {
+          console.log(i);
+          if (tracks[i].track.preview_url !== null) {
+            this.$store.commit('updateTrackId', i);
+            player.src = tracks[this.$store.state.trackId].track.preview_url;// not a very good implementation here
             break;
           }
       }
-      var trackId = this.tracks[this.trackNum].track.uri.split(':')[2];
-      this.currentTrack = trackId;
+      console.log(this.$store.state.trackId);
+      var newTrack = tracks[trackId].track;
+      this.$store.commit('updateTrack', newTrack);
       player.play();
       console.log('playNext!!!');
+    },
+
+  },
+  //remember to check whether computed variable has the same name as the data variable, waste so much time here
+  computed: {
+    ...mapGetters({
+      isPlaying: 'getIsPlaying',
+      tracks: 'getTracks',
+      trackId: 'getTrackId'
+    }),
+  },
+  // TO DO: come up with way to avoid this load error
+  watch: {
+    isPlaying: function(newValue) {
+      console.log('is play changed!', this.isPlaying);
+      console.log('tracks', this.tracks);
+      var player = this.$refs.track;
+      
+      if (newValue === true) {
+        player.play();
+      }else {
+        player.pause();
+      }
+    },
+    tracks: function(newTracks) {
+      console.log('tracks get updated!', newTracks);
+      var player = this.$refs.track;
+
+      var trackId = this.$store.state.trackId;
+
+      for (var i = trackId; i < newTracks.length; i++) {
+          console.log(i);
+          if (newTracks[i].track.preview_url !== null) {
+            this.$store.commit('updateTrackId', i);
+            player.src = newTracks[this.$store.state.trackId].track.preview_url;// not a very good implementation here
+            break;
+          }
+      }
+      player.play();
+    },
+    trackId: function(newId) {
+      console.log('track Id get updated!')
+
+      var player = this.$refs.track;
+      // player.src = this.tracks[newId].track.preview_url;
     }
   },
   created: function(){
+  //     this.$store.watch(
+  //       function(state) {
+  //         return state.isPlaying;  
+  //       },
+  //       function (isPlaying) {
+  //         console.log('is playing changed!')
+  //         var player = this.$refs.track;
+
+  //       }
+  //     )
+
   }
 }
 </script>
