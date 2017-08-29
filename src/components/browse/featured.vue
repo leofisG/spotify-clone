@@ -40,7 +40,35 @@ export default {
   				window.location.href = authUrl;
   			}
   		})
-  	}
+  	},
+    playThisAlbum: function(albumUrl) {
+      var tracks, myself = this;
+      console.log('this playlist is played', albumUrl);
+      var UrlArr = albumUrl.split(":").reverse();
+      var playlistId = UrlArr[0]; 
+      this.$http.get('https://api.spotify.com/v1/users/spotify/playlists/' + playlistId, {headers: {
+        Authorization: 'Bearer ' + this.getLocalStorage('spotify-token')
+      }})
+      .then(function(res) {
+        tracks = res.body.tracks.items;
+        // console.log(this.images[0].url);
+        console.log(this.tracks);
+        console.log('res', res.body);
+
+        console.log('variable tracks', tracks);
+        myself.$emit('playTheseTracks', tracks);
+
+
+      }, function(error) {
+        // console.log(error.bodyText);
+        var errorContent = JSON.parse(error.bodyText);
+        if (errorContent.error.message === 'The access token expired') {
+          var authUrl = 'https://accounts.spotify.com/authorize?client_id=fb0e57d017fe4c1b817fd5f624ebdf4d&redirect_uri=http:%2F%2Flocalhost:8080%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123';
+          this.setLocalStorage('previous-url', location.href);
+          window.location.href = authUrl;
+        }
+      })
+    }
   },
   created: function() {
   	this.getFeaturedAlbum();

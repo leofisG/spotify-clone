@@ -39,7 +39,7 @@
           </div>
         </nav>
       </div>
-      <router-view class='router-view' v-on:playTrack="playSelectedTrack" v-on:greenBtnClicked="greenBtnToggle"></router-view>
+      <router-view class='router-view' v-on:playTrack="playSelectedTrack" v-on:greenBtnClicked="greenBtnToggle" v-on:playTheseTracks="greenBtnToggle"></router-view>
     </div>
 
     <div class="play-bar">
@@ -49,7 +49,7 @@
           <div class="play-control">
             <icon name="random"></icon>
             <icon name="step-backward"></icon>
-            <play-button class="play-button" v-on:playedClicked="playbuttonToggle"></play-button>
+            <play-button class="play-button" v-on:albumPlayClicked="playbuttonToggle"></play-button>
             <icon name="step-forward"></icon>
             <icon name="repeat"></icon>
           </div>
@@ -112,10 +112,6 @@ export default {
       player.play();      
 
 
-
-
-
-
       // //might be of future use keep the codes here for the time being
       // if(!this.$store.state.isPlaying) {
       //   console.log('tracks ',tracks[trackNum].track);
@@ -159,12 +155,20 @@ export default {
       }
       this.$store.commit('togglePlayState')
     },
+    playTheseTracks: function(tracks) {
+      console.log('these tracks are being played')
+
+    },
     greenBtnToggle: function(tracks) {
-      if(tracks !== this.$store.state.tracks) {
+      if(JSON.stringify(tracks) !== JSON.stringify(this.$store.state.tracks)) {
         this.$store.commit('updateTracks', tracks);
+        if(this.$store.state.isPlaying === false) {
+          this.$store.commit('togglePlayState');
+        }
+      }//note that we can't use `===` to compare two objects directly
+      else {
+        this.$store.commit('togglePlayState');
       }
-      this.$store.commit('togglePlayState')
-      // under construction
     },
     updateProgress: function() {
       var player = this.$refs.track;
@@ -229,27 +233,22 @@ export default {
             break;
           }
       }
-      player.play();
+      if(this.$store.state.isPlaying === true) {
+        player.play();      
+      }
+
     },
     trackId: function(newId) {
       console.log('track Id get updated!')
 
       var player = this.$refs.track;
-      // player.src = this.tracks[newId].track.preview_url;
+      player.src = this.tracks[newId].track.preview_url;
+      if(this.$store.state.isPlaying === true) {
+        player.play();      
+      }
     }
   },
   created: function(){
-  //     this.$store.watch(
-  //       function(state) {
-  //         return state.isPlaying;  
-  //       },
-  //       function (isPlaying) {
-  //         console.log('is playing changed!')
-  //         var player = this.$refs.track;
-
-  //       }
-  //     )
-
   }
 }
 </script>

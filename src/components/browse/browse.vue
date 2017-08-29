@@ -6,7 +6,7 @@
       <router-link to='/browse/newreleases' class='link'>new releases</router-link>
       <router-link to='/browse/discover' class='link'>discover</router-link>
     </div>
-    <router-view></router-view>
+    <router-view v-on:playTheseTracks="emitToParent"></router-view>
   </div>
 </template>
 
@@ -16,6 +16,12 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods: {
+    emitToParent: function(tracks) {
+      console.log('emitToParent');
+      this.$emit('playTheseTracks', tracks);
     }
   }
 }
