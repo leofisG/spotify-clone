@@ -2,6 +2,11 @@
 
 > A Vue.js project
 
+Screencast:
+
+![image](https://github.com/524119574/spotify-clone/blob/master/gif/featured.gif)
+![image](https://github.com/524119574/spotify-clone/blob/master/gif/genres.gif)
+
 ## Build Setup
 
 ``` bash
