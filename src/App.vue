@@ -109,40 +109,7 @@ export default {
       if (!this.$store.state.isPlaying) {
           this.$store.commit('togglePlayState');
       }
-      player.play();      
-
-
-      // //might be of future use keep the codes here for the time being
-      // if(!this.$store.state.isPlaying) {
-      //   console.log('tracks ',tracks[trackNum].track);
-      //   console.log('trackNum', trackNum);
-      //   var trackId = tracks[trackNum].track.uri.split(':')[2];
-      //   console.log('trackId', trackId);
-      //   console.log('current', this.currentTrack);
-      //   if(trackId !== this.currentTrack) {
-      //     this.currentTrack = trackId;
-      //     player.src = tracks[trackNum].track.preview_url;
-      //   }
-
-      //   if (this.tracks !== tracks) {
-      //     this.tracks = tracks;
-      //   }
-
-      //   if (this.trackNum !== trackNum) {
-      //     this.trackNum = trackNum;
-      //   }
-
-      //   console.log(this.currentTrack);
-      //   player.play();
-      //   this.$store.state.isPlaying = true;
-      //   console.log('It should start playing!');
-      //   console.log(this.$refs.track.currentTime);
-      // }else{
-      //   if (trackId !== this.currentTrack || this.tracks !== tracks || this.trackNum !== trackNum)
-      //   player.pause();
-      //   this.isPlayed = false;
-      //   console.log('It should now stop playing.')
-      // }
+      player.play();
     },
     playbuttonToggle: function() {
       var player = this.$refs.track;
