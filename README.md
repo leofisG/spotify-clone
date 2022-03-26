@@ -43,4 +43,4 @@ And I'd better pass an id to the component, so that when the the component emit 
 
 
 2017/8/28
-Introduce the Vuex to manage the player's `isPlaying` state. This is necessary because it easier than passing the `prop` from parent to child or emit the event from child to parent. I will have three component under the `playlist/:playlistId` route that will need to be changed when the `isPlaying` state is change. There are the player control play button, the green button, the track that are currently being played.
+Introduce Vuex to manage the player's `isPlaying` state. This is necessary because it is easier than passing the `prop` from parent to child or emit the event from child to parent. I will have three component under the `playlist/:playlistId` route that will need to be changed when the `isPlaying` state is change. There are the player control play button, the green button, the track that are currently being played.
